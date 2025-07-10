@@ -1,0 +1,23 @@
+#!/bin/bash
+
+### sync-repo
+### Pulls changes and pushes changes to the remote repository.
+###
+### Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# Check for required arguments.
+if [[ $# -ne 1 ]]; then
+	echo "Usage: $0 <repo-name>"
+	exit 1
+fi
+
+# Go to the repository.
+pushd /var/git/$1.git
+
+# Pull changes and push.
+git remote update
+git push --all
+
+# Go back.
+popd
+

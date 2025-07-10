@@ -1,0 +1,36 @@
+#!/bin/bash
+
+### fix-main-branch
+### Fixes repos that are currently tracking an unexisting master branch.
+###
+### Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# The function that fixes branches.
+# $1 = Repository directory.
+fix_main_branch () {
+	pushd $1 >/dev/null
+	if git log >/dev/null 2>&1; then
+		echo "$(basename $1) already has a default branch."
+	else
+		git symbolic-ref HEAD refs/heads/main
+		echo "$(basename $1) default branch set to main."
+	fi
+	popd >/dev/null
+}
+
+# Check how we should run our command.
+if [[ $# -eq 0 ]]; then
+	# Run on all repos.
+	pushd /var/git/ >/dev/null
+	for repo in $(find *.git -maxdepth 0 -type d); do
+		fix_main_branch $repo
+	done
+	popd >/dev/null
+elif [[ $# -eq 1 ]]; then
+	# Run on a single repo.
+	fix_main_branch /var/git/$1.git
+else
+	# What do you mean?
+	echo "Usage: $0 [repo-name]"
+	exit 1
+fi

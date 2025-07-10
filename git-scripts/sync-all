@@ -1,0 +1,26 @@
+#!/bin/bash
+
+### sync-all
+### Syncs all of our mirrors with their remotes.
+###
+### Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# Go to the repository archive.
+pushd /var/git/
+
+# Go through repositories.
+for repo in $(find *.git -maxdepth 0 -type d); do
+	# Go into the repository.
+	pushd $repo
+
+	# Pull changes and push.
+	git remote update
+	git push --all
+
+	# Go back.
+	popd
+done
+
+# Go back.
+popd
+

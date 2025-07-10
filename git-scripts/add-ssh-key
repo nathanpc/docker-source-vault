@@ -1,0 +1,16 @@
+#!/bin/bash
+
+### add-ssh-key
+### Adds an SSH key of a peer that has access to the repos in this server.
+###
+### Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# Check for required arguments.
+if [[ $# -ne 2 ]]; then
+	echo "Usage: $0 <peer-name> <ssh-key>"
+	exit 1
+fi
+
+# Appends the SSH key to the correct place with a peer name comment.
+echo -e "# $1\n$2" >> .ssh/authorized_keys
+

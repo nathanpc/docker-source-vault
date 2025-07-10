@@ -1,0 +1,32 @@
+#!/bin/bash
+
+### mirror-repo
+### Mirrors a remote Git repo to our local server.
+###
+### Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# Check for required arguments.
+if [[ $# -ne 1 ]]; then
+	echo "Usage: $0 <repo-url>"
+	exit 1
+fi
+
+# Variables
+repouser=nathanpc
+
+# Go to the repository archive.
+pushd /var/git
+
+# Clone the remote repository.
+sudo git clone --bare "$1"
+cd $(ls -td -- */ | head -n 1)
+
+# Ensure we can pull updates.
+sudo git config remote.origin.fetch 'refs/heads/*:refs/heads/*'
+
+# Fix the permissions.
+sudo chown -R $repouser:www-data .
+
+# Go back.
+popd
+
