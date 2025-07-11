@@ -10,16 +10,22 @@ RUN apt update && apt install -y \
 	groff \
 	apache2 \
 	cgit \
+	vim \
+	sudo \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
+ENV SOURCE_VAULT_CONTAINER 1
 
 # Setup users.
-RUN echo 'root:changeme' | chpasswd
+COPY ./credentials.sh /credentials.sh
+RUN chmod +x /credentials.sh && /credentials.sh && rm /credentials.sh
 
 # Setup sshd.
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-	sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+	sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config && \
+	sed -i -E 's/#AuthorizedKeysFile\s+\.ssh\/authorized_keys/AuthorizedKeysFile\t.ssh\/authorized_keys \/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
+COPY ./ssh/ssh_host_* /etc/ssh
 RUN service ssh start
 
 # Setup git.
