@@ -27,8 +27,8 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
 	sed -i -E 's/#AuthorizedKeysFile\s+\.ssh\/authorized_keys/AuthorizedKeysFile\t.ssh\/authorized_keys \/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
 COPY ./ssh/ssh_host_* /etc/ssh
 RUN service ssh start
-COPY ./ssh/ssh_host_ed25519 /root/.ssh/id_ed25519
-COPY ./ssh/ssh_host_ed25519.pub /root/.ssh/id_ed25519.pub
+COPY ./ssh/ssh_host_ed25519_key /root/.ssh/id_ed25519
+COPY ./ssh/ssh_host_ed25519_key.pub /root/.ssh/id_ed25519.pub
 
 # Setup git.
 RUN git config --global init.defaultBranch main && \
