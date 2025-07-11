@@ -41,7 +41,8 @@ RUN a2enconf cgit && \
 	a2enmod cgid
 
 # Copy management scripts.
-COPY ./git-scripts /
+COPY ./git-scripts/* /git-scripts/
+COPY ./crontab /etc/cron.d/vault
 
 # Set exposed ports.
 EXPOSE 22 80
