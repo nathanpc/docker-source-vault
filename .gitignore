@@ -3,6 +3,7 @@
 /ssh
 
 # Volumes
+/logs/
 /git/
 
 # Docker

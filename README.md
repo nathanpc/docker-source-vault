@@ -23,6 +23,7 @@ services:
     volumes:
       - ./git:/var/git
       - ./ssh/authorized_keys:/etc/ssh/authorized_keys
+      - ./logs:/logs
 ```
 
 The second file that is required for this container to run properly is the one

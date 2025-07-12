@@ -12,6 +12,7 @@ RUN apt update && apt install -y \
 	cgit \
 	vim \
 	sudo \
+	supervisor \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
@@ -43,10 +44,8 @@ RUN a2enconf cgit && \
 # Copy management scripts.
 COPY ./git-scripts/* /git-scripts/
 COPY ./crontab /etc/cron.d/vault
+COPY ./supervisord.conf /etc/supervisor/supervisord.conf
 
-# Set exposed ports.
+# Set exposed ports and run the supervisor.
 EXPOSE 22 80
-
-# Copy the entrypoint script and set it.
-COPY ./entrypoint.sh /bin/entrypoint.sh
-ENTRYPOINT ["/bin/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]
