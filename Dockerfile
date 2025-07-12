@@ -26,6 +26,7 @@ RUN chmod +x /credentials.sh && /credentials.sh && rm /credentials.sh
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
 	sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config && \
 	sed -i -E 's/#AuthorizedKeysFile\s+\.ssh\/authorized_keys/AuthorizedKeysFile\t.ssh\/authorized_keys \/etc\/ssh\/authorized_keys/' /etc/ssh/sshd_config
+COPY ./ssh/known_hosts /etc/ssh/ssh_known_hosts
 COPY ./ssh/ssh_host_* /etc/ssh
 RUN service ssh start
 COPY ./ssh/ssh_host_ed25519_key /root/.ssh/id_ed25519

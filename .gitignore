@@ -1,9 +1,9 @@
 # Sensitive files.
 /credentials.sh
-/ssh
 
 # Volumes
 /logs/
+/repos/
 /git/
 
 # Docker
