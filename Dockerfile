@@ -43,7 +43,6 @@ RUN a2enconf cgit && \
 
 # Copy management scripts.
 COPY ./git-scripts/* /git-scripts/
-COPY ./crontab /etc/cron.d/vault
 COPY ./supervisord.conf /etc/supervisor/supervisord.conf
 
 # Set exposed ports and run the supervisor.

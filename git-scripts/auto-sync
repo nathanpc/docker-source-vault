@@ -1,0 +1,42 @@
+#!/bin/bash
+
+### auto-sync
+### Automatically synchronizes all Git repositories using supervisord.
+###
+### Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# Go into ready state and wait for the event to come in.
+echo 'READY'
+read -s eventinfo
+echo "$eventinfo" 1>&2
+
+# Get the counter value.
+counter=0
+counterfile=/tmp/git-sync-counter
+if [ -f "$counterfile" ]; then
+	counter=$(head -n 1 "$counterfile")
+fi
+
+# Increment the counter and store it.
+counter=$((counter+1))
+echo "$counter" > "$counterfile"
+echo "Counter: $counter" 1>&2
+
+# Check if we've reached our timer goal.
+if [ "$counter" -lt "$TICK_GOAL" ]; then
+	# See you next time.
+	echo -e -n "RESULT 2\nOK"
+	exit 0
+else
+	# Reset the counter.
+	counter=0
+	echo "$counter" > "$counterfile"
+fi
+
+# Run synchronization script.
+echo "=== SYNC STARTED ========================================" 1>&2
+/git-scripts/sync-all 1>&2
+echo "=== SYNC ENDED ==========================================" 1>&2
+
+# Notify we processed the event.
+echo -e -n "RESULT 2\nOK"
