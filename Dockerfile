@@ -13,6 +13,7 @@ RUN apt update && apt install -y \
 	vim \
 	sudo \
 	supervisor \
+	cvs \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /

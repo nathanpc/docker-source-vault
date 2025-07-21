@@ -21,7 +21,8 @@ services:
       - '8080:80'
     hostname: vault
     volumes:
-      - ./git:/var/git
+      - ./repos/git:/var/git
+      - ./repos/cvs:/var/cvsroot
       - ./ssh/authorized_keys:/etc/ssh/authorized_keys
       - ./logs:/logs
 ```
