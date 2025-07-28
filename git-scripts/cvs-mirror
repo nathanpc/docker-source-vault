@@ -1,0 +1,38 @@
+#!/bin/bash
+
+### cvs-mirror
+### Mirrors a CVS module into a new Git repo on our local server.
+###
+### Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# Check for required arguments.
+if [[ $# -lt 1 ]]; then
+	echo "Usage: $0 module [gitremote]"
+	exit 1
+fi
+
+# Variables
+repouser=nathanpc
+mirrordir="/var/git/cvs-mirror"
+convfile="/etc/authors"
+
+# Go to the repository archive.
+mkdir -p "$mirrordir"
+pushd "$mirrordir"
+
+# Initialize Git repository.
+git cvsimport -C "$1" -a -R -r cvs -A "$convfile" -o main -k -d "/var/cvsroot" \
+	"$1"
+cd "$1"
+git branch -m main
+
+# Setup remote mirror if requested.
+if [[ $# -ge 2 ]]; then
+	echo "Setting remote mirror as origin..."
+	git remote add origin "$2"
+	git push -u origin main
+fi
+
+# Go back.
+popd
+

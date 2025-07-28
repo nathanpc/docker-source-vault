@@ -48,6 +48,7 @@ echo 'root:changeme' | chpasswd
 # Add regular users.
 /sbin/useradd -m -G sudo,users,dialout -s /bin/bash 'username'
 echo 'username:changeme' | chpasswd
+echo "username=First Last Name <username@email.com>" >> /etc/authors
 ```
 
 Any changes to `credentials.sh` **requires a rebuild of the container image**,
@@ -78,6 +79,18 @@ Given the fact that your Docker host most likely already exposes an `sshd` on
 port 22, and that you don't want to have to specify a non-standard port when
 using Git, it's advisable that you create a virtual NIC and assign it to this
 container.
+
+### Directories
+
+It's important to note that this repository works with specific directories
+where you should place your Git and CVS repositories. These directories must be
+respected in order for all the scripts to properly work:
+
+  - All Git repositories must be placed in `/var/git`
+  - CVSROOT should be located at `/var/cvsroot`
+
+You will also find all Git administration scripts located inside the
+`/git-scripts` folder.
 
 ## License
 
